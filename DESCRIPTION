@@ -16,3 +16,5 @@ Imports:
     tibble
 Suggests: 
     testthat
+URL: https://github.com/dmbwebb/dups
+BugReports: https://github.com/dmbwebb/dups/issues
