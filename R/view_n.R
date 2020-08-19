@@ -78,7 +78,7 @@ view_n <- function(data, n = 200, by_group = TRUE) {
       warning("Not showing by groups")
     }
 
-    tibble::view(sample_n(x, n_updated))
+    tibble::view(sample_n(data, n_updated))
 
   } else if (grouped & by_group) {
 
