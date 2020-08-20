@@ -13,8 +13,7 @@ RoxygenNote: 7.1.0
 Imports: 
     dplyr,
     magrittr,
-    tibble,
-    trackr
+    tibble
 Suggests: 
     testthat
 URL: https://github.com/dmbwebb/dups
