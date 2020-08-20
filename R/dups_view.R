@@ -22,7 +22,7 @@ dups_view <- function(data, ..., n_viewing = 200) {
     n_groups <- dplyr::n_groups(filtered_data)
     if (n_groups < n_viewing) n_viewing <- n_groups
 
-    view_n(filtered_data, n = n_viewing)
+    trackr::view_n(filtered_data, n = n_viewing)
   }
 
   invisible(data)
