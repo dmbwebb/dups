@@ -12,4 +12,6 @@
 dups_warn <- function(data, ...) {
   n_dups <- dups_count(data, ...)
   if (n_dups > 0) warning(paste0("There are ", n_dups, " non-unique rows in the dataset"))
+
+  invisible(data)
 }
