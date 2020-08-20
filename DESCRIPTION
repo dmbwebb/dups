@@ -14,8 +14,10 @@ Imports:
     dplyr,
     magrittr,
     tibble,
-    trackr
+    trackr (>= 0.1.0)
 Suggests: 
     testthat
 URL: https://github.com/dmbwebb/dups
 BugReports: https://github.com/dmbwebb/dups/issues
+Remotes:  
+    dmbwebb/trackr
