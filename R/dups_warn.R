@@ -14,6 +14,7 @@ dups_warn <- function(data, ...) {
   if (n_dups > 0) warning(paste0("There are ", n_dups, " non-unique rows in the dataset"))
 
   invisible(data)
+<<<<<<< HEAD
 }
 
 
@@ -33,4 +34,6 @@ dups_stop <- function(data, ...) {
   if (n_dups > 0) stop(paste0("There are ", n_dups, " non-unique rows in the dataset"))
 
   invisible(data)
+=======
+>>>>>>> 1250ee8a5401864db13fd74c06268e753613a4bd
 }
