@@ -18,37 +18,67 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of dups is to ...
+Most data from the wild are rife with duplicates. dups is a package based on the tidyverse that helps you detect, identify, and remove any duplicates that exist in a dataset.
 
 ## Installation
 
-You can install the released version of dups from [CRAN](https://CRAN.R-project.org) with:
+You can install the development version of dups from this GitHub repository:
 
 ``` r
-install.packages("dups")
+library(devtools)
+devtools::install_github("dmbwebb/dups")
+library("dups")
+```
+```{r loadlib, include = FALSE, echo=T, results='hide', message=F, warning=F}
+library("tidyverse")
+library("dups")
+set.seed(12345)
 ```
 
-## Example
+## Basic usage
 
-This is a basic example which shows you how to solve a common problem:
+In a dups function, you define the dataset as the first argument, and the id variable in the second argument. Note that all the dups functions easily extend to allow for cases in which multiple id variables should together uniquely identify a row.
+```{r df}
+df <- tibble(id = sample(1:100, size = 100, replace = TRUE),
+             x1 = sample(runif(100)),
+             x2 = sample(runif(100)))
 
-```{r example}
-library(dups)
-## basic example code
+dups_count(df, id)
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+The dups_count function returns the total number of rows with non-unique id variables, which in this case is 59. To find out what's going on with these duplicated ids, we can run some of the other dups functions.
 
-```{r cars}
-summary(cars)
+```{r dups_report, dependson = "df"}
+dups_report(df, id)
+```
+The dups_report function shows us that there are 41 rows with only one copy of that unique_id (non-duplicated), but there are 38 rows with 2 copies, and 21 rows with 3 copies.
+
+To easily drill down and examine only the dataset rows with duplicated ids, use dups_filter.
+```{r dups_filter, dependson = "df"}
+dups_filter(df, id) %>% head(5)
 ```
 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date.
+Here you can also use dups_view to quickly view the resulting filtered dataset.
 
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
+Or alternatively, you might want to create a variable that indicates whether a row has a duplicated ID, perhaps so that you can remember which rows are duplicated when manipulating the dataset later down the line. In this case, use dups_tag:
+```{r dups_tag, dependson = "df"}
+dups_tag(df, id) %>% head(5)
 ```
 
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub!
+The above functions will help you find duplicates and diagnose their source. Once you have found the source of the duplicates, the best approach often involves some manual change to prevent the duplicates from even coming into existence early on in the code. 
+
+If, on the other hand, you have rows that are duplicated but which don't contain different information (e.g they are exactly the same across all variables, or all the variables that you care about), then you might want to use dups_drop.
+```{r dups_drop, dependson = "df"}
+dups_drop(df, id) %>% head(5)
+```
+You should be careful with dups_drop: it will always keep the first row for each ID value, whether this was what you intended or not. So only use it when you *know* that duplicated rows for a given ID don't contain differing information that you care about. In the example below, when you run dups_drop, it drops the second row of the dataset, which means you lose the information that x was 0.5 for that second row.
+```{r example_dups_drop}
+important_dups <- tibble(id = c(1, 1, 2, 3),
+                         x = c(0, 0.5, -2, -2))
+dups_drop(important_dups, id)
+```
+So you should only run this type of operation when you are sure that x doesn't matter - otherwise you may be erroneously dropping data without realising.
+
+
+
+
