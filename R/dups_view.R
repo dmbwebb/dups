@@ -16,7 +16,7 @@ dups_view <- function(data, ..., n_viewing = 200) {
     dplyr::group_by(...) %>%
     dplyr::filter(n() > 1)
 
-  if (is.null(n_viewing)) dplyr::view(filtered_data)
+  if (is.null(n_viewing)) tibble::view(filtered_data)
 
   else {
     n_groups <- dplyr::n_groups(filtered_data)
